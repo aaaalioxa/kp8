@@ -65,6 +65,7 @@ iterator Insert(list * l, iterator * i, char * t) {
     iterator new = {(struct item *)malloc(sizeof(struct item))};
     strcpy(new.node->data, t);
     l->size++;
+    i->node->next->prev = new.node;
     new.node->next = i->node->next;
     new.node->prev = i->node;
     i->node->next = new.node;
@@ -153,6 +154,7 @@ iterator Swap(list * l, int k) {
         n.node->prev = Last(l).node;
         Last(l).node->next = p.node;
         p.node->next = tmpNext;
+        p.node->prev = midElement.node;
         l->head = n.node;
         return midElement;
     }
@@ -163,7 +165,8 @@ iterator Swap(list * l, int k) {
         n.node->next = midElement.node;
         n.node->prev = tmpPrev;
         tmpPrev->next = n.node;
-        p.node->next = First(l).node;
+        p.node->next = l->head;
+        l->head->prev = p.node;
         p.node->prev = midElement.node;
         return midElement;
     }
@@ -171,11 +174,12 @@ iterator Swap(list * l, int k) {
     struct item * tmpNext = n.node->next;
     midElement.node->next = p.node;
     midElement.node->prev = n.node;
-    n.node->prev = tmpPrev;
     n.node->next = midElement.node;
+    n.node->prev = tmpPrev;
     tmpPrev->next = n.node;
-    tmpNext->prev = p.node;
     p.node->next = tmpNext;
+    p.node->prev = midElement.node;
+    tmpNext->prev = p.node;
     return midElement;
 }
 
